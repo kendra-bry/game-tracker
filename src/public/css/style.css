@@ -1,8 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200..700&display=swap');
+
 html,
 body {
   padding: 0;
   margin: 0;
   height: 100%;
+  font-family: 'Nunito';
+  font-size: 18px !important;
 }
 
 body {
@@ -29,4 +33,14 @@ footer {
 
 .star-container {
   display: flex;
+}
+
+.detail-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rating-stars {
+  font-size: 1.8em;
 }
