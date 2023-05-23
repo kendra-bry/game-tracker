@@ -7,7 +7,7 @@ export default class GameListing {
   }
 
   async init() {
-    this.games = await this.dataSource.getData();
+    this.games = await this.dataSource.search();
     renderListWithTemplate(smallGameCardTemplate, this.listElement, this.games);
   }
 }
