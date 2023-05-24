@@ -1,5 +1,5 @@
-import { loadHeaderFooter, loadModal, loadResults } from './modules/utils.mjs';
+import { loadHeaderFooter, loadModal, loadSearchResults } from './modules/utils.mjs';
 
 loadHeaderFooter();
 loadModal();
-loadResults();
+loadSearchResults();

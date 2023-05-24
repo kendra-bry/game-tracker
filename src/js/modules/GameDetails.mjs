@@ -4,22 +4,44 @@ export default class GameDetails {
   constructor(gameId, dataSource) {
     this.gameId = gameId;
     this.dataSource = dataSource;
+    this.userGameData = null;
   }
 
   async init() {
     this.game = await this.dataSource.getGameDetails(this.gameId);
-    console.log({ game: this.game });
+    localStorage.setItem('game-details', JSON.stringify(this.game));
+
+    this.setUserDetails();
+    this.render();
+  }
+
+  update() {
+    this.game = JSON.parse(localStorage.getItem('game-details'));
+    this.setUserDetails();
     this.render();
   }
 
   render() {
     document.querySelector('#game-details').innerHTML = detailsTemplate(
-      this.game
+      this.game,
+      this.userGameData
     );
+  }
+
+  setUserDetails() {
+    let userLibrary = JSON.parse(localStorage.getItem('user-library'));
+    if (userLibrary) {
+      let userEntry = userLibrary.find(
+        (entry) => entry.game_id == this.game.id
+      );
+      if (userEntry) {
+        this.userGameData = userEntry;
+      }
+    }
   }
 }
 
-const detailsTemplate = (game) => {
+const detailsTemplate = (game, userGameData) => {
   return `<div class="border rounded p-3 shadow bg-light">
     <div class="row">
       <h1 class="col-md-8">${game.name}</h1>
@@ -34,7 +56,7 @@ const detailsTemplate = (game) => {
           <div class="col">
             <div class="row">
               <label class="col text-uppercase fw-bold fs-6" for="">Metacritic:</label>
-              <span class="col">${game.metacritic}</span>
+              <span class="col">${game.metacritic ?? ''}</span>
             </div>
             <div class="row">
               <label class="col text-uppercase fw-bold fs-6" for="">Released:</label>
@@ -46,7 +68,7 @@ const detailsTemplate = (game) => {
             </div>
           </div>
 
-          ${addUserDetails()}
+          ${addUserDetails(userGameData)}
 
         </div>
         <hr class="border-3">
@@ -55,10 +77,7 @@ const detailsTemplate = (game) => {
           ${getDescription(game.description_raw)}
         </div>
         <hr class="border-3">
-        <div>
-          <h5 class="text-uppercase">Comments</h5>
-          <p>Every single time you click your mouse while holding a gun, you expect bullets to fly and enemies to fall. But here you will try out the FPS game filled with environmental puzzles and engaging story. </p>
-        </div>
+        ${getComments(userGameData)}
       </div>
       <div class="col-lg-4 mb-3 order-first order-lg-last">
         <img
@@ -79,36 +98,36 @@ const detailsTemplate = (game) => {
           data-bs-target="#playedModal"
           data-bs-gameId="${game.id}"
           data-bs-gameName="${game.name}"
-        >Mark As Played</button>
+          data-bs-title="${userGameData ? 'Edit Play Data' : 'Mark As Played'}"
+        >${userGameData ? 'Edit Play Data' : 'Mark As Played'}</button>
       </div>
     </div>
 
   </div>`;
 };
 
-const addUserDetails = () => {
-  return `<div class="col">
-    <div class="row">
-      <label class="col-6 col-xl-5 text-uppercase fw-bold fs-6" for="">Started On:</label>
-      <span class="col">2007-10-09</span>
-    </div>
-    <div class="row">
-      <label class="col-6 col-xl-5 text-uppercase fw-bold fs-6" for="">Finished On:</label>
-      <span class="col">2007-10-09</span>
-    </div>
-    <div class="row">
-      <label class="col-6 col-xl-5 text-uppercase fw-bold fs-6" for="">My Rating:</label>
-      <span class="col">
-        <div>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-half"></i>
-          <i class="bi bi-star"></i>
+const addUserDetails = (userGameData) => {
+  if (userGameData) {
+    return `<div class="col">
+        <div class="row">
+          <label class="col-6 col-xl-5 text-uppercase fw-bold fs-6" for="">Started On:</label>
+          <span class="col">${userGameData.start_date}</span>
         </div>
-      </span>
-    </div>
-  </div>`;
+        <div class="row">
+          <label class="col-6 col-xl-5 text-uppercase fw-bold fs-6" for="">Finished On:</label>
+          <span class="col">${userGameData.end_date}</span>
+        </div>
+        <div class="row">
+          <label class="col-6 col-xl-5 text-uppercase fw-bold fs-6" for="">My Rating:</label>
+          <span class="col">
+            <div>
+              ${getStarRating(userGameData.rating)}
+            </div>
+          </span>
+        </div>
+      </div>`;
+  }
+  return '';
 };
 
 const getDescription = (description) => {
@@ -126,4 +145,14 @@ const getDescription = (description) => {
 
 const getGenres = (genres) => {
   return genres.map((genre) => genre.name).join(', ');
+};
+
+const getComments = (userGameData) => {
+  if (userGameData?.comments) {
+    return `<div>
+      <h5 class="text-uppercase">Comments</h5>
+      <p>${userGameData.comments}</p>
+    </div>`;
+  }
+  return '';
 };

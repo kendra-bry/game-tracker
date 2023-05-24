@@ -1,4 +1,5 @@
-import { formDataToJSON } from './utils.mjs';
+import { formDataToJSON, getParams, renderWithTemplate } from './utils.mjs';
+import GameDetails from './GameDetails.mjs';
 
 export function interactiveStars() {
   document.querySelectorAll('.star').forEach((item) => {
@@ -93,7 +94,7 @@ export function interactiveStars() {
   });
 }
 
-export function submitMarkAsPlayed() {
+export function handleModalActions() {
   document
     .querySelector('#mark-as-played-submit')
     .addEventListener('click', () => {
@@ -101,15 +102,17 @@ export function submitMarkAsPlayed() {
       let jsonFormData = formDataToJSON(form);
       let filledStars = document.querySelectorAll('.selected-star');
       jsonFormData.rating = filledStars.length;
-      console.log({ jsonFormData });
+      updateLibraryStorage(jsonFormData);
 
-      let userLibrary;
-      userLibrary = JSON.parse(localStorage.getItem('user-library'));
-      if (!userLibrary) {
-        userLibrary = [];
+      if (getParams('id')) {
+        new GameDetails(jsonFormData.game_id).update();
+      } else {
+        window.location.reload();
       }
-      userLibrary.push(jsonFormData);
-      localStorage.setItem('user-library', JSON.stringify(userLibrary));
+
+      bootstrap.Modal.getInstance(
+        document.querySelector('#playedModal')
+      ).hide();
     });
 }
 
@@ -118,22 +121,29 @@ export function handleMetaData() {
   if (playedModal) {
     playedModal.addEventListener('show.bs.modal', (event) => {
       const button = event.relatedTarget;
-      const gameId = button.getAttribute('data-bs-gameId');
-      playedModal.querySelector('[name="game_id"]').value = gameId;
-      const gameName = button.getAttribute('data-bs-gameName');
-      playedModal.querySelector('[name="game_name"]').value = gameName;
 
-      // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-      // const now = new Date();
-      // const day = ('0' + now.getDate()).slice(-2);
-      // const month = ('0' + (now.getMonth() + 1)).slice(-2);
-      // const today = now.getFullYear() + '-' + month + '-' + day;
-      // playedModal.querySelector('[name="start_date"]').value = today;
-      // const tomorrow =
-      //   now.getFullYear() + '-' + month + '-' + (parseInt(day) + 1);
-      // playedModal.querySelector('[name="end_date"]').value = tomorrow;
-      // playedModal.querySelector('[name="comments"]').value =
-      //   'These are my test comments.';
+      const gameId = button.getAttribute('data-bs-gameId');
+      const gameName = button.getAttribute('data-bs-gameName');
+      const title = button.getAttribute('data-bs-title');
+      playedModal.querySelector('[name="game_id"]').value = gameId;
+      playedModal.querySelector('[name="game_name"]').value = gameName;
+      playedModal.querySelector('#playedModalLabel').innerText = title;
+
+      let userLibrary = JSON.parse(localStorage.getItem('user-library'));
+      if (userLibrary) {
+        let game = userLibrary.find((game) => game.game_id == gameId);
+
+        if (game) {
+          playedModal.querySelector('[name="start_date"]').value =
+            game.start_date;
+          playedModal.querySelector('[name="end_date"]').value = game.end_date;
+          playedModal.querySelector('[name="comments"]').value = game.comments;
+          setRating(game.rating);
+
+          addDeleteBtn(userLibrary, gameId);
+        }
+      }
+
     });
 
     playedModal.addEventListener('hide.bs.modal', (event) => {
@@ -143,6 +153,32 @@ export function handleMetaData() {
       document.querySelector('#mark-as-played').reset();
     });
   }
+}
+
+function addDeleteBtn(userLibrary, gameId) {
+  const deleteBtn = `<button type="button" class="btn btn-danger" id="delete-play-data">Delete Play Data</button>`;
+
+  renderWithTemplate(
+    deleteBtn,
+    document.querySelector('#mark-as-played-submit'),
+    null,
+    null,
+    'beforebegin'
+  );
+
+  document.querySelector('#delete-play-data').addEventListener('click', () => {
+    let gameIndex = userLibrary.findIndex((game) => game.game_id == gameId);
+    userLibrary.splice(gameIndex, 1);
+    localStorage.setItem('user-library', JSON.stringify(userLibrary));
+
+    if (getParams('id')) {
+      new GameDetails(gameId).update();
+    } else {
+      window.location.reload();
+    }
+
+    bootstrap.Modal.getInstance(document.querySelector('#playedModal')).hide();
+  });
 }
 
 function fillStar(query) {
@@ -173,4 +209,46 @@ function emptyStarClick(query) {
 
   let emptyStar = document.querySelector(`#${query}`);
   emptyStar.classList.remove('d-none');
+}
+
+function setRating(rating) {
+  switch (rating) {
+    case 1:
+      fillStarClick('star-1');
+      break;
+    case 2:
+      ['star-1', 'star-2'].forEach((id) => fillStarClick(id));
+      break;
+    case 3:
+      ['star-1', 'star-2', 'star-3'].forEach((id) => fillStarClick(id));
+      break;
+    case 4:
+      ['star-1', 'star-2', 'star-3', 'star-4'].forEach((id) =>
+        fillStarClick(id)
+      );
+      break;
+    case 5:
+      ['star-1', 'star-2', 'star-3', 'star-4', 'star-5'].forEach((id) =>
+        fillStarClick(id)
+      );
+      break;
+  }
+}
+
+function updateLibraryStorage(jsonFormData) {
+  let userLibrary = JSON.parse(localStorage.getItem('user-library'));
+  if (!userLibrary) {
+    userLibrary = [];
+  } else {
+    let index = userLibrary.findIndex(
+      (game) => game.game_id == jsonFormData.game_id
+    );
+
+    if (index > -1) {
+      userLibrary[index] = jsonFormData;
+    } else {
+      userLibrary.push(jsonFormData);
+    }
+  }
+  localStorage.setItem('user-library', JSON.stringify(userLibrary));
 }
