@@ -44,3 +44,8 @@ footer {
 .rating-stars {
   font-size: 1.8em;
 }
+
+.stars-interactive i:hover {
+  color: rgb(255, 193, 7);
+  cursor: pointer;
+}
