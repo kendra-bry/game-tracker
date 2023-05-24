@@ -23,7 +23,7 @@ footer {
   margin-top: auto;
 }
 
-.container-fluid {
+.main {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
