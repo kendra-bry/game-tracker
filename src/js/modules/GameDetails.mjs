@@ -4,44 +4,44 @@ export default class GameDetails {
   constructor(gameId, dataSource) {
     this.gameId = gameId;
     this.dataSource = dataSource;
-    this.userGameData = null;
+    this.userEntries = null;
   }
 
   async init() {
     this.game = await this.dataSource.getGameDetails(this.gameId);
     localStorage.setItem('game-details', JSON.stringify(this.game));
 
-    this.setUserDetails();
+    this.setUserEntries();
     this.render();
   }
 
   update() {
     this.game = JSON.parse(localStorage.getItem('game-details'));
-    this.setUserDetails();
+    this.setUserEntries();
     this.render();
   }
 
   render() {
     document.querySelector('#game-details').innerHTML = detailsTemplate(
       this.game,
-      this.userGameData
+      this.userEntries
     );
   }
 
-  setUserDetails() {
-    let userLibrary = JSON.parse(localStorage.getItem('user-library'));
-    if (userLibrary) {
-      let userEntry = userLibrary.find(
+  setUserEntries() {
+    let userEntries = JSON.parse(localStorage.getItem('user-entries'));
+    if (userEntries) {
+      let userEntry = userEntries.find(
         (entry) => entry.game_id == this.game.id
       );
       if (userEntry) {
-        this.userGameData = userEntry;
+        this.userEntries = userEntry;
       }
     }
   }
 }
 
-const detailsTemplate = (game, userGameData) => {
+const detailsTemplate = (game, userEntries) => {
   return `<div class="border rounded p-3 shadow bg-light">
     <div class="row">
       <h1 class="col-md-8">${game.name}</h1>
@@ -68,7 +68,7 @@ const detailsTemplate = (game, userGameData) => {
             </div>
           </div>
 
-          ${addUserDetails(userGameData)}
+          ${addUserDetails(userEntries)}
 
         </div>
         <hr class="border-3">
@@ -77,7 +77,7 @@ const detailsTemplate = (game, userGameData) => {
           ${getDescription(game.description_raw)}
         </div>
         <hr class="border-3">
-        ${getComments(userGameData)}
+        ${getComments(userEntries)}
       </div>
       <div class="col-lg-4 mb-3 order-first order-lg-last">
         <img
@@ -98,30 +98,30 @@ const detailsTemplate = (game, userGameData) => {
           data-bs-target="#playedModal"
           data-bs-gameId="${game.id}"
           data-bs-gameName="${game.name}"
-          data-bs-title="${userGameData ? 'Edit Play Data' : 'Mark As Played'}"
-        >${userGameData ? 'Edit Play Data' : 'Mark As Played'}</button>
+          data-bs-title="${userEntries ? 'Edit Play Data' : 'Mark As Played'}"
+        >${userEntries ? 'Edit Play Data' : 'Mark As Played'}</button>
       </div>
     </div>
 
   </div>`;
 };
 
-const addUserDetails = (userGameData) => {
-  if (userGameData) {
+const addUserDetails = (userEntries) => {
+  if (userEntries) {
     return `<div class="col">
         <div class="row">
           <label class="col-6 col-xl-5 text-uppercase fw-bold fs-6" for="">Started On:</label>
-          <span class="col">${userGameData.start_date}</span>
+          <span class="col">${userEntries.start_date}</span>
         </div>
         <div class="row">
           <label class="col-6 col-xl-5 text-uppercase fw-bold fs-6" for="">Finished On:</label>
-          <span class="col">${userGameData.end_date}</span>
+          <span class="col">${userEntries.end_date}</span>
         </div>
         <div class="row">
           <label class="col-6 col-xl-5 text-uppercase fw-bold fs-6" for="">My Rating:</label>
           <span class="col">
             <div>
-              ${getStarRating(userGameData.rating)}
+              ${getStarRating(userEntries.rating)}
             </div>
           </span>
         </div>
@@ -147,11 +147,11 @@ const getGenres = (genres) => {
   return genres.map((genre) => genre.name).join(', ');
 };
 
-const getComments = (userGameData) => {
-  if (userGameData?.comments) {
+const getComments = (userEntries) => {
+  if (userEntries?.comments) {
     return `<div>
       <h5 class="text-uppercase">Comments</h5>
-      <p>${userGameData.comments}</p>
+      <p>${userEntries.comments}</p>
     </div>`;
   }
   return '';

@@ -36,10 +36,10 @@ export function renderWithTemplate(
 }
 
 export const smallGameCardTemplate = (game) => {
-  let userLibrary = JSON.parse(localStorage.getItem('user-library'));
+  let userEntries = JSON.parse(localStorage.getItem('user-entries'));
   let userEntry;
-  if (userLibrary) {
-    userEntry = userLibrary.find((entry) => entry.game_id == game.id);
+  if (userEntries) {
+    userEntry = userEntries.find((entry) => entry.game_id == game.id);
   }
 
   return `

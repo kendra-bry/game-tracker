@@ -129,9 +129,9 @@ export function handleMetaData() {
       playedModal.querySelector('[name="game_name"]').value = gameName;
       playedModal.querySelector('#playedModalLabel').innerText = title;
 
-      let userLibrary = JSON.parse(localStorage.getItem('user-library'));
-      if (userLibrary) {
-        let game = userLibrary.find((game) => game.game_id == gameId);
+      let userEntries = JSON.parse(localStorage.getItem('user-entries'));
+      if (userEntries) {
+        let game = userEntries.find((game) => game.game_id == gameId);
 
         if (game) {
           playedModal.querySelector('[name="start_date"]').value =
@@ -140,7 +140,7 @@ export function handleMetaData() {
           playedModal.querySelector('[name="comments"]').value = game.comments;
           setRating(game.rating);
 
-          addDeleteBtn(userLibrary, gameId);
+          addDeleteBtn(userEntries, gameId);
         }
       }
 
@@ -155,7 +155,7 @@ export function handleMetaData() {
   }
 }
 
-function addDeleteBtn(userLibrary, gameId) {
+function addDeleteBtn(userEntries, gameId) {
   const deleteBtn = `<button type="button" class="btn btn-danger" id="delete-play-data">Delete Play Data</button>`;
 
   renderWithTemplate(
@@ -167,9 +167,9 @@ function addDeleteBtn(userLibrary, gameId) {
   );
 
   document.querySelector('#delete-play-data').addEventListener('click', () => {
-    let gameIndex = userLibrary.findIndex((game) => game.game_id == gameId);
-    userLibrary.splice(gameIndex, 1);
-    localStorage.setItem('user-library', JSON.stringify(userLibrary));
+    let gameIndex = userEntries.findIndex((game) => game.game_id == gameId);
+    userEntries.splice(gameIndex, 1);
+    localStorage.setItem('user-entries', JSON.stringify(userEntries));
 
     if (getParams('id')) {
       new GameDetails(gameId).update();
@@ -236,19 +236,19 @@ function setRating(rating) {
 }
 
 function updateLibraryStorage(jsonFormData) {
-  let userLibrary = JSON.parse(localStorage.getItem('user-library'));
-  if (!userLibrary) {
-    userLibrary = [];
+  let userEntries = JSON.parse(localStorage.getItem('user-entries'));
+  if (!userEntries) {
+    userEntries = [];
   } else {
-    let index = userLibrary.findIndex(
+    let index = userEntries.findIndex(
       (game) => game.game_id == jsonFormData.game_id
     );
 
     if (index > -1) {
-      userLibrary[index] = jsonFormData;
+      userEntries[index] = jsonFormData;
     } else {
-      userLibrary.push(jsonFormData);
+      userEntries.push(jsonFormData);
     }
   }
-  localStorage.setItem('user-library', JSON.stringify(userLibrary));
+  localStorage.setItem('user-entries', JSON.stringify(userEntries));
 }
