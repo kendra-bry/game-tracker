@@ -1,4 +1,8 @@
-import { interactiveStars, submitMarkAsPlayed } from './StarRater.mjs';
+import {
+  interactiveStars,
+  submitMarkAsPlayed,
+  handleMetaData,
+} from './PlayedModal.mjs';
 
 export const renderListWithTemplate = (
   templateFn,
@@ -53,12 +57,20 @@ export const smallGameCardTemplate = (game) => {
         <div class="fw-semibold mb-1">Finished: ${game.released}</div>
         <div class="row gx-2 mt-4">
           <div class="col-12 mb-2">
-            <a href="/details/index.html?id=${
-              game.id
-            }" class="btn btn-outline-primary w-100">View Details</a>
+            <a
+              href="/details/index.html?id=${game.id}"
+              class="btn btn-outline-primary w-100"
+            >View Details</a>
           </div>
           <div class="col-12">
-            <a href="#" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#playedModal">Mark As Played</a>
+            <a
+              href="#"
+              class="btn btn-primary w-100"
+              data-bs-toggle="modal"
+              data-bs-target="#playedModal"
+              data-bs-gameId="${game.id}"
+              data-bs-gameName="${game.name}"
+            >Mark As Played</a>
           </div>
         </div>
       </div>
@@ -122,4 +134,16 @@ export async function loadModal() {
   const main = document.querySelector('.main');
   renderWithTemplate(modalTemplate, main, interactiveStars);
   submitMarkAsPlayed();
+  handleMetaData();
+}
+
+export function formDataToJSON(formElement) {
+  const formData = new FormData(formElement),
+    convertedJSON = {};
+
+  formData.forEach(function (value, key) {
+    convertedJSON[key] = value;
+  });
+
+  return convertedJSON;
 }
