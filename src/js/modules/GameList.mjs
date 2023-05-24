@@ -1,14 +1,12 @@
-import { renderListWithTemplate, smallGameCardTemplate } from './utils.mjs';
-
 export default class GameListing {
-  constructor(dataSource, listElement) {
+  constructor(dataSource, query) {
     this.dataSource = dataSource;
-    this.listElement = listElement;
+    this.query = query;
   }
 
   async init() {
-    this.games = await this.dataSource.search();
-    renderListWithTemplate(smallGameCardTemplate, this.listElement, this.games);
+    const results = await this.dataSource.search(this.query);
+    localStorage.setItem('search-results', JSON.stringify(results));
+    window.location.replace('/');
   }
 }
-

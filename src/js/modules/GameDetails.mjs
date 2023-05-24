@@ -71,13 +71,15 @@ const detailsTemplate = (game) => {
 
     <div class="row mb-1 d-flex justify-content-end">
       <div class="col-lg-4">
-        <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#playedModal">Edit</button>
-      </div>
-    </div>
-
-    <div class="row mb-1 d-flex justify-content-end">
-      <div class="col-lg-4">
-        <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#playedModal">Mark As Played</button>
+        <button
+          id="mark-played-btn"
+          type="button"
+          class="btn btn-primary w-100"
+          data-bs-toggle="modal"
+          data-bs-target="#playedModal"
+          data-bs-gameId="${game.id}"
+          data-bs-gameName="${game.name}"
+        >Mark As Played</button>
       </div>
     </div>
 

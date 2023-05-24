@@ -4,6 +4,8 @@ import {
   handleMetaData,
 } from './PlayedModal.mjs';
 
+import Search from './Search.mjs';
+
 export const renderListWithTemplate = (
   templateFn,
   parentElement,
@@ -123,6 +125,7 @@ export async function loadHeaderFooter() {
   const headerTemplate = await loadTemplate('../../partials/header.html');
   const headerHtml = document.querySelector('#main-header');
   renderWithTemplate(headerTemplate, headerHtml);
+  new Search().submitSearch();
 
   const footerTemplate = await loadTemplate('../../partials/footer.html');
   const footerHtml = document.querySelector('#main-footer');
@@ -146,4 +149,16 @@ export function formDataToJSON(formElement) {
   });
 
   return convertedJSON;
+}
+
+export function loadResults() {
+  const games = JSON.parse(localStorage.getItem('search-results')).results;
+
+  if (games) {
+    renderListWithTemplate(
+      smallGameCardTemplate,
+      document.querySelector('#card-holder'),
+      games
+    );
+  }
 }

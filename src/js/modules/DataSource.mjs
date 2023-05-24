@@ -13,10 +13,10 @@ async function convertToJson(res) {
 export default class DataSource {
   constructor() {}
 
-  async search() {
-    const data = await fetch(`${baseURL}/games?key=${apiKey}`);
+  async search(query) {
+    const data = await fetch(`${baseURL}/games?search=${query}&key=${apiKey}`);
     const json = await convertToJson(data);
-    return json.results;
+    return json;
   }
 
   async getGameDetails(id) {
