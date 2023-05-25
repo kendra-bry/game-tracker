@@ -207,13 +207,16 @@ const addDeleteBtn = (gameId) => {
       });
   };
 
-  renderWithTemplate(
-    deleteBtn,
-    document.querySelector('#mark-as-played-submit'),
-    handleDelete,
-    null,
-    'beforebegin'
-  );
+  let existingDeleteBtn = document.querySelector('#delete-play-data');
+  if (!existingDeleteBtn) {
+    renderWithTemplate(
+      deleteBtn,
+      document.querySelector('#mark-as-played-submit'),
+      handleDelete,
+      null,
+      'beforebegin'
+    );
+  }
 };
 
 const fillStar = (query) => {
@@ -297,8 +300,15 @@ const updateUserLibrary = (gameId) => {
   if (!userLibrary) {
     userLibrary = [];
   }
-
   let game = searchResults.find((game) => game.id == gameId);
-  userLibrary.push(game);
+
+  let index = userLibrary.findIndex(
+    (libraryEntry) => libraryEntry.id == game.id
+  );
+
+  if (index < 0) {
+    userLibrary.push(game);
+  }
+
   localStorage.setItem('user-library', JSON.stringify(userLibrary));
 };
