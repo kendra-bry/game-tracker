@@ -61,21 +61,27 @@ const smallGameCardTemplate = (game) => {
       <div class="card-footer py-3">
         <div class="row gx-2">
           <div class="col-12 mb-2">
-            <a
-              href="/details/index.html?id=${game.id}"
-              class="btn btn-outline-primary w-100"
-            >View Details</a>
+            <button class="btn btn-light w-100">
+              <i class="bi bi-plus-square me-1"></i>
+              Add to backlog
+            </button>
           </div>
-          <div class="col-12">
+          <div class="col-12 mb-2">
             <a
               href="#"
-              class="btn btn-primary w-100"
+              class="btn ${userEntry ? 'btn-warning' : 'btn-success'} w-100"
               data-bs-toggle="modal"
               data-bs-target="#playedModal"
               data-bs-gameId="${game.id}"
               data-bs-gameName="${game.name}"
               data-bs-title="${userEntry ? 'Edit Play Data' : 'Mark As Played'}"
             >${userEntry ? 'Edit Play Data' : 'Mark As Played'}</a>
+          </div>
+          <div class="col-12 mb-2">
+            <a
+              href="/details/index.html?id=${game.id}"
+              class="btn btn-primary w-100"
+            >View Details</a>
           </div>
         </div>
       </div>

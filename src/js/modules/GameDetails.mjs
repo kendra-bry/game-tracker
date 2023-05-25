@@ -44,7 +44,7 @@ export default class GameDetails {
 const detailsTemplate = (game, userEntries) => {
   return `<div class="border rounded p-3 shadow bg-light">
     <div class="row">
-      <h1 class="col-md-7">${game.name}</h1>
+    <h1 class="col-md-7">${game.name}</h1>
       <div class="col-md-5 d-md-flex justify-content-end align-items-center">
         <div>
           <div class="rating-stars text-warning">
@@ -93,6 +93,14 @@ const detailsTemplate = (game, userEntries) => {
       </div>
     </div>
 
+    <div class="row mb-1 d-flex justify-content-end">
+      <div class="col-lg-4">
+        <button class="btn btn-secondary w-100">
+          <i class="bi bi-plus-square me-1"></i>
+          Add to backlog
+        </button>
+      </div>
+    </div>
     <div class="row mb-1 d-flex justify-content-end">
       <div class="col-lg-4">
         <button
