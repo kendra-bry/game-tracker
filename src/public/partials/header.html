@@ -13,18 +13,19 @@
                     <a class="nav-link active" aria-current="page" href="/" id="home">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/search/index.html" id="search">Search Results</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="/library/index.html" id="library">Library</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/backlog/index.html" id="backlog">Backlog</a>
                 </li>
             </ul>
-            <form id="search-form" class="d-flex mt-3" role="search">
+            <form class="d-flex mt-3 search-form" role="search">
                 <input name="query" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search-box">
-                <button class="btn btn-primary" type="submit">Search</button>
+                <button class="btn btn-primary search-submit" type="submit">Search</button>
+                <button class="btn btn-primary d-flex align-items-center d-none searching-btn" type="button" disabled>
+                    <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                    Searching...
+                </button>
             </form>
         </div>
     </div>
