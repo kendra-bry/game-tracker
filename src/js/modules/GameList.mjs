@@ -45,7 +45,7 @@ const smallGameCardTemplate = (game) => {
         </div>
         ${setUserData(userEntry)}
       </div>
-      <div class="card-footer">
+      <div class="card-footer py-3">
         <div class="row gx-2">
           <div class="col-12 mb-2">
             <a
