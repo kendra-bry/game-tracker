@@ -48,3 +48,10 @@ footer {
 .stars-interactive i:hover {
   cursor: pointer;
 }
+
+.global-rating {
+  font-size: small;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-top: 5px;
+}

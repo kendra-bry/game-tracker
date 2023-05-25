@@ -39,9 +39,22 @@ const smallGameCardTemplate = (game) => {
         height="300"
       >
       <div class="card-body">
-        <h5 class="card-title">${game.name}</h5>
-        <div class="fw-semibold mb-1">
-          Release Date: ${game.released}
+        <h5 class="card-title fs-4">${game.name}</h5>
+        <div class="fw-semibold mb-1 row">
+          <div class="col-5">
+            Release Date:
+          </div>
+          <div class="col">
+            ${game.released ?? 'No data'}
+          </div>
+        </div>
+        <div class="fw-semibold mb-1 row">
+          <div class="col-5">
+            Global Rating:
+          </div>
+          <div class="col ps-2 text-warning">
+            ${getStarRating(game.rating)}
+          </div>
         </div>
         ${setUserData(userEntry)}
       </div>
@@ -74,19 +87,28 @@ const setUserData = (userEntry) => {
   if (userEntry) {
     return `
     <div class="border-top pt-2 mt-2">
-      <div class="d-flex justify-content-center">
-        <h5 class="fw-bold bg-success text-light p-2 rounded w-50 text-center">
+      <div class="d-flex justify-content-center mt-1">
+        <h5 class="fw-bold bg-success text-light py-1 rounded w-50 text-center">
           <i class="bi bi-check2-square"></i>
           Played
         </h5>
       </div>
-      <div class="star-container">
-        <span class="fw-semibold">My Rating:</span>
-        <div class="ms-1 d-flex align-items-center">
+      <div class="fw-semibold mb-1 row">
+        <div class="col-5">
+          My Rating:
+        </div>
+        <div class="col pt-1 text-info">
           ${getStarRating(userEntry.rating)}
         </div>
       </div>
-      <div class="fw-semibold mb-1">Finished: ${userEntry.end_date}</div>
+      <div class="fw-semibold mb-1 row">
+        <div class="col-5">
+          Finished:
+        </div>
+        <div class="col">
+          ${userEntry.end_date}
+        </div>
+      </div>
     </div>
     `;
   }

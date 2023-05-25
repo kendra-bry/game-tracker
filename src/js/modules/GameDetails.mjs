@@ -44,9 +44,14 @@ export default class GameDetails {
 const detailsTemplate = (game, userEntries) => {
   return `<div class="border rounded p-3 shadow bg-light">
     <div class="row">
-      <h1 class="col-md-8">${game.name}</h1>
-      <div class="col-md-4 rating-stars d-md-flex justify-content-end text-warning align-items-center">
-          ${getStarRating(game.rating)}
+      <h1 class="col-md-7">${game.name}</h1>
+      <div class="col-md-5 d-md-flex justify-content-end align-items-center">
+        <div>
+          <div class="rating-stars text-warning">
+            ${getStarRating(game.rating)}
+          </div>
+          <div class="ms-1 ms-md-5 global-rating">Global Rating</div>
+        </div>
       </div>
     </div>
 
@@ -56,7 +61,7 @@ const detailsTemplate = (game, userEntries) => {
           <div class="col">
             <div class="row">
               <label class="col text-uppercase fw-bold fs-6" for="">Metacritic:</label>
-              <span class="col">${game.metacritic ?? ''}</span>
+              <span class="col">${game.metacritic ?? 'No data'}</span>
             </div>
             <div class="row">
               <label class="col text-uppercase fw-bold fs-6" for="">Released:</label>
@@ -109,23 +114,21 @@ const detailsTemplate = (game, userEntries) => {
 const addUserDetails = (userEntries) => {
   if (userEntries) {
     return `<div class="col">
-        <div class="row">
-          <label class="col-6 col-xl-5 text-uppercase fw-bold fs-6" for="">Started On:</label>
-          <span class="col">${userEntries.start_date}</span>
-        </div>
-        <div class="row">
-          <label class="col-6 col-xl-5 text-uppercase fw-bold fs-6" for="">Finished On:</label>
-          <span class="col">${userEntries.end_date}</span>
-        </div>
-        <div class="row">
-          <label class="col-6 col-xl-5 text-uppercase fw-bold fs-6" for="">My Rating:</label>
-          <span class="col">
-            <div>
-              ${getStarRating(userEntries.rating)}
-            </div>
-          </span>
-        </div>
-      </div>`;
+      <div class="row">
+        <label class="col-6 col-xl-5 text-uppercase fw-bold fs-6" for="">Started On:</label>
+        <span class="col">${userEntries.start_date}</span>
+      </div>
+      <div class="row">
+        <label class="col-6 col-xl-5 text-uppercase fw-bold fs-6" for="">Finished On:</label>
+        <span class="col">${userEntries.end_date}</span>
+      </div>
+      <div class="row">
+        <label class="col-6 col-xl-5 text-uppercase fw-bold fs-6" for="">My Rating:</label>
+        <span class="col ps-md-2 text-info">
+            ${getStarRating(userEntries.rating)}
+        </span>
+      </div>
+    </div>`;
   }
   return '';
 };
