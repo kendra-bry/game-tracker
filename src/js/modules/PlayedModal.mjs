@@ -3,6 +3,7 @@ import {
   getParams,
   renderWithTemplate,
   loadTemplate,
+  getUserEntry,
 } from './utils.mjs';
 import GameDetails from './GameDetails.mjs';
 
@@ -31,6 +32,7 @@ const handleSubmit = () => {
       let filledStars = document.querySelectorAll('.selected-star');
       jsonFormData.rating = filledStars.length;
       updateUserEntries(jsonFormData);
+      updateUserLibrary(jsonFormData.game_id);
 
       if (getParams('id')) {
         new GameDetails(jsonFormData.game_id).update();
@@ -57,19 +59,17 @@ const handleShowHide = () => {
       playedModal.querySelector('[name="game_name"]').value = gameName;
       playedModal.querySelector('#playedModalLabel').innerText = title;
 
-      let userEntries = JSON.parse(localStorage.getItem('user-entries'));
-      if (userEntries) {
-        let game = userEntries.find((game) => game.game_id == gameId);
+      let userEntry = getUserEntry(gameId);
+      if (userEntry) {
+        playedModal.querySelector('[name="start_date"]').value =
+          userEntry.start_date;
+        playedModal.querySelector('[name="end_date"]').value =
+          userEntry.end_date;
+        playedModal.querySelector('[name="comments"]').value =
+          userEntry.comments;
+        setRating(userEntry.rating);
 
-        if (game) {
-          playedModal.querySelector('[name="start_date"]').value =
-            game.start_date;
-          playedModal.querySelector('[name="end_date"]').value = game.end_date;
-          playedModal.querySelector('[name="comments"]').value = game.comments;
-          setRating(game.rating);
-
-          addDeleteBtn(userEntries, gameId);
-        }
+        addDeleteBtn(gameId);
       }
     });
 
@@ -175,30 +175,45 @@ const interactiveStars = () => {
   });
 };
 
-const addDeleteBtn = (userEntries, gameId) => {
+const addDeleteBtn = (gameId) => {
+  const userEntries = JSON.parse(localStorage.getItem('user-entries'));
+  const userLibrary = JSON.parse(localStorage.getItem('user-library'));
+
   const deleteBtn = `<button type="button" class="btn btn-danger" id="delete-play-data">Delete Play Data</button>`;
+
+  const handleDelete = () => {
+    document
+      .querySelector('#delete-play-data')
+      .addEventListener('click', () => {
+        let userEntryIndex = userEntries.findIndex(
+          (game) => game.game_id == gameId
+        );
+        userEntries.splice(userEntryIndex, 1);
+        localStorage.setItem('user-entries', JSON.stringify(userEntries));
+
+        let libraryIndex = userLibrary.findIndex((game) => game.id == gameId);
+        userLibrary.splice(libraryIndex, 1);
+        localStorage.setItem('user-library', JSON.stringify(userLibrary));
+
+        if (getParams('id')) {
+          new GameDetails(gameId).update();
+        } else {
+          window.location.reload();
+        }
+
+        bootstrap.Modal.getInstance(
+          document.querySelector('#playedModal')
+        ).hide();
+      });
+  };
 
   renderWithTemplate(
     deleteBtn,
     document.querySelector('#mark-as-played-submit'),
-    null,
+    handleDelete,
     null,
     'beforebegin'
   );
-
-  document.querySelector('#delete-play-data').addEventListener('click', () => {
-    let gameIndex = userEntries.findIndex((game) => game.game_id == gameId);
-    userEntries.splice(gameIndex, 1);
-    localStorage.setItem('user-entries', JSON.stringify(userEntries));
-
-    if (getParams('id')) {
-      new GameDetails(gameId).update();
-    } else {
-      window.location.reload();
-    }
-
-    bootstrap.Modal.getInstance(document.querySelector('#playedModal')).hide();
-  });
 };
 
 const fillStar = (query) => {
@@ -285,4 +300,5 @@ const updateUserLibrary = (gameId) => {
 
   let game = searchResults.find((game) => game.id == gameId);
   userLibrary.push(game);
+  localStorage.setItem('user-library', JSON.stringify(userLibrary));
 };

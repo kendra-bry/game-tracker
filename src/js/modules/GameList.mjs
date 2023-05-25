@@ -4,7 +4,7 @@ import {
   getUserEntry,
 } from './utils.mjs';
 
-export default class GameListing {
+export default class GameList {
   constructor(dataSource, query) {
     this.dataSource = dataSource;
     this.query = query;
@@ -15,20 +15,14 @@ export default class GameListing {
     localStorage.setItem('search-results', JSON.stringify(results));
   }
 
-  render() {
-    loadSearchResults();
+  render(games, container) {
+    loadSearchResults(games, container);
   }
 }
 
-const loadSearchResults = () => {
-  const games = JSON.parse(localStorage.getItem('search-results')).results;
-
+const loadSearchResults = (games, container) => {
   if (games) {
-    renderListWithTemplate(
-      smallGameCardTemplate,
-      document.querySelector('#card-holder'),
-      games
-    );
+    renderListWithTemplate(smallGameCardTemplate, container, games);
   }
 };
 

@@ -40,8 +40,7 @@ export const loadTemplate = async (path) => {
 export const loadHeaderFooter = async () => {
   const headerTemplate = await loadTemplate('../../partials/header.html');
   const headerHtml = document.querySelector('#main-header');
-  renderWithTemplate(headerTemplate, headerHtml);
-  new Search().submitSearch();
+  renderWithTemplate(headerTemplate, headerHtml, initializeHeader);
 
   const footerTemplate = await loadTemplate('../../partials/footer.html');
   const footerHtml = document.querySelector('#main-footer');
@@ -100,4 +99,28 @@ export const getUserEntry = (gameId) => {
     userEntry = userEntries.find((entry) => entry.game_id == gameId);
   }
   return userEntry;
+};
+
+const initializeHeader = () => {
+  new Search().init();
+  setActivePage();
+};
+
+const setActivePage = () => {
+  const page = window.location.pathname.split('/')[1];
+  if (page.length) {
+    if (page == 'search') {
+      const query = JSON.parse(localStorage.getItem('search-query'));
+      const searchBox = document.querySelector('#search-box');
+      searchBox.value = query.query;
+    }
+
+    let link = document.querySelector(`#${page}`);
+    link?.classList.add('active');
+    link?.setAttribute('aria-current', 'page');
+
+    let home = document.querySelector('#home');
+    home.classList.remove('active');
+    home.removeAttribute('aria-current');
+  }
 };
