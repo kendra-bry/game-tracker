@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="/css/style.css">
   <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
 
-  <title>Game Tracker</title>
+  <title>Game Trackr</title>
 </head>
 
 <body class="bg-dark-subtle">
@@ -19,13 +19,54 @@
   <div class="container-fluid min-vh-100 main">
     <header id="main-header"></header>
 
-    <main class="py-5 container">
-      <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4" id="card-holder">
+    <div>
+      <div class="hero-image" style="height: 500px">
+        <div class="hero-text d-flex flex-column align-items-center justify-content-center h-100 text-light text-center p-3">
+          <h1 class="" style="font-size:70px">Game Trackr</h1>
+          <p class="fs-5 fw-semibold">Level-up Your Gaming Experience</p>
+        </div>
       </div>
+    </div>
+
+    <main>
+      <section class="bg-dark" style="height: 500px">
+        <div class="container h-100 d-flex align-items-center">
+          <div class="row text-light">
+            <div class="col-12 col-md-4 p-5 d-flex flex-column justify-content-center border">
+              <i class="bi bi-star-fill text-center fs-1 mb-4"></i>
+              <div class="text-center w-100">
+                Keep a record of games you've played, rate them, and share your experiences.
+              </div>
+            </div>
+            <div class="col-12 col-md-4 p-5 d-flex flex-column justify-content-center border">
+              <i class="bi bi-controller fs-1 mb-4 text-center"></i>
+              <div class="text-center w-100">
+                Create your own gaming library and backlog of games to play next.
+              </div>
+            </div>
+            <div class="col-12 col-md-4 p-5 d-flex flex-column justify-content-center border">
+              <i class="bi bi-dpad-fill fs-1 mb-4 text-center"></i>
+              <div class="text-center w-100">
+                Dive into nostalgia or discover something new!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section style="height: 300px">
+        <div class="container h-100 d-flex flex-column justify-content-center">
+          <h3>Search for a game to begin building your library</h3>
+          <form id="search-form" class="d-flex mt-3" role="search">
+            <input name="query" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search-box">
+            <button class="btn btn-outline-primary" type="submit">Search</button>
+          </form>
+        </div>
+      </section>
     </main>
 
 
-    <footer class="bg-dark text-light py-3" id="main-footer"></footer>
+    <footer class="bg-dark text-light py-2" id="main-footer"></footer>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
