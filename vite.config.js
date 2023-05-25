@@ -12,6 +12,7 @@ export default defineConfig((command, mode) => {
           details: resolve(__dirname, 'src/details/index.html'),
           library: resolve(__dirname, 'src/library/index.html'),
           search: resolve(__dirname, 'src/search/index.html'),
+          backlog: resolve(__dirname, 'src/backlog/index.html'),
         },
       },
     },
