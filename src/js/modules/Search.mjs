@@ -9,18 +9,26 @@ export default class Search {
 }
 
 const handleSubmit = () => {
-  const form = document.querySelector('#search-form');
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+  const forms = document.querySelectorAll('.search-form');
+  forms.forEach((form) => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-    const query = formDataToJSON(form);
-    const dataSource = new DataSource();
+      const searchBtns = document.querySelectorAll('.search-submit');
+      searchBtns.forEach((btn) => btn.classList.add('d-none'));
 
-    const results = await dataSource.search(query.query);
-    localStorage.setItem('search-results', JSON.stringify(results));
-    localStorage.setItem('search-query', JSON.stringify(query));
+      const searchingBtns = document.querySelectorAll('.searching-btn');
+      searchingBtns.forEach((btn) => btn.classList.remove('d-none'));
 
-    window.location.replace('/search/index.html');
+      const query = formDataToJSON(form);
+      const dataSource = new DataSource();
+
+      const results = await dataSource.search(query.query);
+      localStorage.setItem('search-results', JSON.stringify(results));
+      localStorage.setItem('search-query', JSON.stringify(query));
+
+      window.location.replace('/search/index.html');
+    });
   });
 };
 

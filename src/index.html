@@ -57,14 +57,18 @@
       <section style="height: 300px">
         <div class="container h-100 d-flex flex-column justify-content-center">
           <h3>Search for a game to begin building your library</h3>
-          <form id="search-form" class="d-flex mt-3" role="search">
-            <input name="query" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search-box">
-            <button class="btn btn-outline-primary" type="submit">Search</button>
+          <form class="d-flex mt-3 search-form" role="search">
+            <input name="query" class="form-control me-2" type="search" placeholder="e.g. Super Mario" aria-label="Search">
+            <button class="btn btn-outline-primary search-submit" type="submit">Search</button>
+            <button class="btn btn-primary d-flex align-items-center d-none searching-btn" type="button" disabled>
+              <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+              Searching...
+            </button>
           </form>
         </div>
       </section>
-    </main>
 
+    </main>
 
     <footer class="bg-dark text-light py-2" id="main-footer"></footer>
   </div>

@@ -5,5 +5,4 @@ loadHeaderFooter();
 loadModal();
 
 const games = JSON.parse(localStorage.getItem('search-results')).results;
-console.log({ games });
 new GameList().render(games, document.querySelector('#card-holder'));
