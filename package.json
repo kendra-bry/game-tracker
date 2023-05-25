@@ -3,7 +3,7 @@
   "author": "Kendra Bryant",
   "license": "ISC",
   "version": "1.0.0",
-  "description": "Game Tracker app built for WDD 330 class.",
+  "description": "Game Trackr app built for WDD 330 class.",
   "main": "main.js",
   "scripts": {
     "start": "vite",
