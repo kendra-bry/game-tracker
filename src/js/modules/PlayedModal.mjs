@@ -1,7 +1,88 @@
-import { formDataToJSON, getParams, renderWithTemplate } from './utils.mjs';
+import {
+  formDataToJSON,
+  getParams,
+  renderWithTemplate,
+  loadTemplate,
+} from './utils.mjs';
 import GameDetails from './GameDetails.mjs';
 
-export function interactiveStars() {
+export default class PlayedModal {
+  constructor() {}
+
+  init() {
+    interactiveStars();
+    handleSubmit();
+    handleShowHide();
+  }
+
+  async render() {
+    const modalTemplate = await loadTemplate('../../partials/playedModal.html');
+    const main = document.getElementsByTagName('main')[0];
+    renderWithTemplate(modalTemplate, main, this.init, null, 'beforebegin');
+  }
+}
+
+const handleSubmit = () => {
+  document
+    .querySelector('#mark-as-played-submit')
+    .addEventListener('click', () => {
+      const form = document.querySelector('#mark-as-played');
+      let jsonFormData = formDataToJSON(form);
+      let filledStars = document.querySelectorAll('.selected-star');
+      jsonFormData.rating = filledStars.length;
+      updateUserEntries(jsonFormData);
+
+      if (getParams('id')) {
+        new GameDetails(jsonFormData.game_id).update();
+      } else {
+        window.location.reload();
+      }
+
+      bootstrap.Modal.getInstance(
+        document.querySelector('#playedModal')
+      ).hide();
+    });
+};
+
+const handleShowHide = () => {
+  const playedModal = document.getElementById('playedModal');
+  if (playedModal) {
+    playedModal.addEventListener('show.bs.modal', (event) => {
+      const button = event.relatedTarget;
+
+      const gameId = button.getAttribute('data-bs-gameId');
+      const gameName = button.getAttribute('data-bs-gameName');
+      const title = button.getAttribute('data-bs-title');
+      playedModal.querySelector('[name="game_id"]').value = gameId;
+      playedModal.querySelector('[name="game_name"]').value = gameName;
+      playedModal.querySelector('#playedModalLabel').innerText = title;
+
+      let userEntries = JSON.parse(localStorage.getItem('user-entries'));
+      if (userEntries) {
+        let game = userEntries.find((game) => game.game_id == gameId);
+
+        if (game) {
+          playedModal.querySelector('[name="start_date"]').value =
+            game.start_date;
+          playedModal.querySelector('[name="end_date"]').value = game.end_date;
+          playedModal.querySelector('[name="comments"]').value = game.comments;
+          setRating(game.rating);
+
+          addDeleteBtn(userEntries, gameId);
+        }
+      }
+    });
+
+    playedModal.addEventListener('hide.bs.modal', () => {
+      ['star-1', 'star-2', 'star-3', 'star-4', 'star-5'].forEach((id) =>
+        emptyStarClick(id)
+      );
+      document.querySelector('#mark-as-played').reset();
+    });
+  }
+};
+
+const interactiveStars = () => {
   document.querySelectorAll('.star').forEach((item) => {
     item.addEventListener('mouseenter', () => {
       fillStar(item.id);
@@ -92,70 +173,9 @@ export function interactiveStars() {
       }
     });
   });
-}
+};
 
-export function handleModalActions() {
-  document
-    .querySelector('#mark-as-played-submit')
-    .addEventListener('click', () => {
-      const form = document.querySelector('#mark-as-played');
-      let jsonFormData = formDataToJSON(form);
-      let filledStars = document.querySelectorAll('.selected-star');
-      jsonFormData.rating = filledStars.length;
-      updateLibraryStorage(jsonFormData);
-
-      if (getParams('id')) {
-        new GameDetails(jsonFormData.game_id).update();
-      } else {
-        window.location.reload();
-      }
-
-      bootstrap.Modal.getInstance(
-        document.querySelector('#playedModal')
-      ).hide();
-    });
-}
-
-export function handleMetaData() {
-  const playedModal = document.getElementById('playedModal');
-  if (playedModal) {
-    playedModal.addEventListener('show.bs.modal', (event) => {
-      const button = event.relatedTarget;
-
-      const gameId = button.getAttribute('data-bs-gameId');
-      const gameName = button.getAttribute('data-bs-gameName');
-      const title = button.getAttribute('data-bs-title');
-      playedModal.querySelector('[name="game_id"]').value = gameId;
-      playedModal.querySelector('[name="game_name"]').value = gameName;
-      playedModal.querySelector('#playedModalLabel').innerText = title;
-
-      let userEntries = JSON.parse(localStorage.getItem('user-entries'));
-      if (userEntries) {
-        let game = userEntries.find((game) => game.game_id == gameId);
-
-        if (game) {
-          playedModal.querySelector('[name="start_date"]').value =
-            game.start_date;
-          playedModal.querySelector('[name="end_date"]').value = game.end_date;
-          playedModal.querySelector('[name="comments"]').value = game.comments;
-          setRating(game.rating);
-
-          addDeleteBtn(userEntries, gameId);
-        }
-      }
-
-    });
-
-    playedModal.addEventListener('hide.bs.modal', (event) => {
-      ['star-1', 'star-2', 'star-3', 'star-4', 'star-5'].forEach((id) =>
-        emptyStarClick(id)
-      );
-      document.querySelector('#mark-as-played').reset();
-    });
-  }
-}
-
-function addDeleteBtn(userEntries, gameId) {
+const addDeleteBtn = (userEntries, gameId) => {
   const deleteBtn = `<button type="button" class="btn btn-danger" id="delete-play-data">Delete Play Data</button>`;
 
   renderWithTemplate(
@@ -179,39 +199,39 @@ function addDeleteBtn(userEntries, gameId) {
 
     bootstrap.Modal.getInstance(document.querySelector('#playedModal')).hide();
   });
-}
+};
 
-function fillStar(query) {
+const fillStar = (query) => {
   let el = document.querySelector(`#${query}`);
   el.classList.remove('bi-star');
   el.classList.add('bi-star-fill');
-}
+};
 
-function emptyStar(query) {
+const emptyStar = (query) => {
   let el = document.querySelector(`#${query}`);
   el.classList.add('bi-star');
   el.classList.remove('bi-star-fill');
-}
+};
 
-function fillStarClick(query) {
+const fillStarClick = (query) => {
   let filledStar = document.querySelector(`#${query}-fill`);
   filledStar.classList.remove('d-none');
   filledStar.classList.add('selected-star');
 
   let emptyStar = document.querySelector(`#${query}`);
   emptyStar.classList.add('d-none');
-}
+};
 
-function emptyStarClick(query) {
+const emptyStarClick = (query) => {
   let filledStar = document.querySelector(`#${query}-fill`);
   filledStar.classList.add('d-none');
   filledStar.classList.remove('selected-star');
 
   let emptyStar = document.querySelector(`#${query}`);
   emptyStar.classList.remove('d-none');
-}
+};
 
-function setRating(rating) {
+const setRating = (rating) => {
   switch (rating) {
     case 1:
       fillStarClick('star-1');
@@ -233,12 +253,13 @@ function setRating(rating) {
       );
       break;
   }
-}
+};
 
-function updateLibraryStorage(jsonFormData) {
+const updateUserEntries = (jsonFormData) => {
   let userEntries = JSON.parse(localStorage.getItem('user-entries'));
   if (!userEntries) {
     userEntries = [];
+    userEntries.push(jsonFormData);
   } else {
     let index = userEntries.findIndex(
       (game) => game.game_id == jsonFormData.game_id
@@ -251,4 +272,17 @@ function updateLibraryStorage(jsonFormData) {
     }
   }
   localStorage.setItem('user-entries', JSON.stringify(userEntries));
-}
+};
+
+const updateUserLibrary = (gameId) => {
+  let searchResults = JSON.parse(
+    localStorage.getItem('search-results')
+  ).results;
+  let userLibrary = JSON.parse(localStorage.getItem('user-library'));
+  if (!userLibrary) {
+    userLibrary = [];
+  }
+
+  let game = searchResults.find((game) => game.id == gameId);
+  userLibrary.push(game);
+};

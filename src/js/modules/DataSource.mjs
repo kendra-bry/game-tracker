@@ -14,13 +14,21 @@ export default class DataSource {
   constructor() {}
 
   async search(query) {
-    const data = await fetch(`${baseURL}/games?search=${query}&key=${apiKey}`);
+    const data = await fetch(`${baseURL}/games?search=${encodeURIComponent(query)}&key=${apiKey}`);
     const json = await convertToJson(data);
     return json;
   }
 
   async getGameDetails(id) {
     const data = await fetch(`${baseURL}/games/${id}?key=${apiKey}`);
+    const json = await convertToJson(data);
+    return json;
+  }
+
+  async library(query) {
+    const data = await fetch(
+      `${baseURL}/games?search=${encodeURIComponent(query)}&key=${apiKey}`
+    );
     const json = await convertToJson(data);
     return json;
   }

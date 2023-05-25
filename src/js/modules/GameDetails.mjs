@@ -143,9 +143,7 @@ const getDescription = (description) => {
   return descHTML.join('');
 };
 
-const getGenres = (genres) => {
-  return genres.map((genre) => genre.name).join(', ');
-};
+const getGenres = (genres) => genres.map((genre) => genre.name).join(', ');
 
 const getComments = (userEntries) => {
   if (userEntries?.comments) {

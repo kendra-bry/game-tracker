@@ -1,5 +1,7 @@
-import { loadHeaderFooter, loadModal, loadSearchResults } from './modules/utils.mjs';
+import { loadHeaderFooter, loadModal } from './modules/utils.mjs';
+import GameListing from './modules/GameList.mjs';
 
 loadHeaderFooter();
 loadModal();
-loadSearchResults();
+
+new GameListing().render();
