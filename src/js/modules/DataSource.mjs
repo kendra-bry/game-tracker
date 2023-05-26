@@ -25,11 +25,4 @@ export default class DataSource {
     return json;
   }
 
-  async library(query) {
-    const data = await fetch(
-      `${baseURL}/games?search=${encodeURIComponent(query)}&key=${apiKey}`
-    );
-    const json = await convertToJson(data);
-    return json;
-  }
 }

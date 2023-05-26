@@ -1,52 +1,52 @@
 <div class="modal fade" id="playedModal" tabindex="-1" aria-labelledby="playedModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="playedModalLabel"></h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="playedModalLabel"></h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="mark-as-played">
+          <div class="form-floating mb-3 d-none">
+            <input type="text" name="game_id" class="form-control" id="floatingInput" placeholder="Game Id">
+            <label for="floatingInput">Game Id</label>
+          </div>
+          <div class="form-floating mb-3 d-none">
+            <input type="text" name="game_name" class="form-control" id="floatingInput" placeholder="Game Name">
+            <label for="floatingInput">Game Name</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="date" name="start_date" class="form-control" id="floatingInput" placeholder="Start Date">
+            <label for="floatingInput">Start Date</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="date" name="end_date" class="form-control" id="floatingPassword" placeholder="End Date">
+            <label for="floatingPassword">End Date</label>
+          </div>
+          <div class="form-floating mb-3">
+            <textarea name="comments" class="form-control" placeholder="Leave a comment here" id="floatingTextarea" style="height: 100px"></textarea>
+            <label for="floatingTextarea">Comments</label>
+          </div>
+          <div class="form-control">
+            <label for="rating" class="fs-6 text-secondary">Rating</label>
+            <div class="rating-stars stars-interactive d-flex justify-content-center">
+              <i id="star-1" class="star text-info bi bi-star mx-sm-1"></i>
+              <i id="star-1-fill" class="star-fill text-info bi bi-star-fill d-none text-info mx-sm-1"></i>
+              <i id="star-2" class="star text-info bi bi-star mx-sm-1"></i>
+              <i id="star-2-fill" class="star-fill text-info bi bi-star-fill d-none text-info mx-sm-1"></i>
+              <i id="star-3" class="star text-info bi bi-star mx-sm-1"></i>
+              <i id="star-3-fill" class="star-fill text-info bi bi-star-fill d-none text-info mx-sm-1"></i>
+              <i id="star-4" class="star text-info bi bi-star mx-sm-1"></i>
+              <i id="star-4-fill" class="star-fill text-info bi bi-star-fill d-none text-info mx-sm-1"></i>
+              <i id="star-5" class="star text-info bi bi-star mx-sm-1"></i>
+              <i id="star-5-fill" class="star-fill text-info bi bi-star-fill d-none text-info mx-sm-1"></i>
             </div>
-            <div class="modal-body">
-                <form id="mark-as-played">
-                    <div class="form-floating mb-3 d-none">
-                        <input type="text" name="game_id" class="form-control" id="floatingInput" placeholder="Game Id">
-                        <label for="floatingInput">Game Id</label>
-                    </div>
-                    <div class="form-floating mb-3 d-none">
-                        <input type="text" name="game_name" class="form-control" id="floatingInput" placeholder="Game Name">
-                        <label for="floatingInput">Game Name</label>
-                    </div>
-                    <div class="form-floating mb-3">
-                        <input type="date" name="start_date" class="form-control" id="floatingInput" placeholder="Start Date">
-                        <label for="floatingInput">Start Date</label>
-                    </div>
-                    <div class="form-floating mb-3">
-                        <input type="date" name="end_date" class="form-control" id="floatingPassword" placeholder="End Date">
-                        <label for="floatingPassword">End Date</label>
-                    </div>
-                    <div class="form-floating mb-3">
-                        <textarea name="comments" class="form-control" placeholder="Leave a comment here" id="floatingTextarea" style="height: 100px"></textarea>
-                        <label for="floatingTextarea">Comments</label>
-                    </div>
-                    <div class="form-control">
-                        <label for="rating" class="fs-6 text-secondary">Rating</label>
-                        <div class="rating-stars stars-interactive d-flex justify-content-center">
-                            <i id="star-1" class="star text-info bi bi-star mx-sm-1"></i>
-                            <i id="star-1-fill" class="star-fill text-info bi bi-star-fill d-none text-info mx-sm-1"></i>
-                            <i id="star-2" class="star text-info bi bi-star mx-sm-1"></i>
-                            <i id="star-2-fill" class="star-fill text-info bi bi-star-fill d-none text-info mx-sm-1"></i>
-                            <i id="star-3" class="star text-info bi bi-star mx-sm-1"></i>
-                            <i id="star-3-fill" class="star-fill text-info bi bi-star-fill d-none text-info mx-sm-1"></i>
-                            <i id="star-4" class="star text-info bi bi-star mx-sm-1"></i>
-                            <i id="star-4-fill" class="star-fill text-info bi bi-star-fill d-none text-info mx-sm-1"></i>
-                            <i id="star-5" class="star text-info bi bi-star mx-sm-1"></i>
-                            <i id="star-5-fill" class="star-fill text-info bi bi-star-fill d-none text-info mx-sm-1"></i>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer d-flex justify-content-between">
-                <button type="button" class="btn btn-primary ms-auto" id="mark-as-played-submit">Save changes</button>
-            </div>
-        </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer d-flex justify-content-between">
+        <button type="button" class="btn btn-primary ms-auto" id="mark-as-played-submit">Save changes</button>
+      </div>
     </div>
+  </div>
 </div>
