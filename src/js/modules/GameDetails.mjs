@@ -17,17 +17,18 @@ export default class GameDetails {
     this.game = await this.dataSource.getGameDetails(this.gameId);
     localStorage.setItem('game-details', JSON.stringify(this.game));
 
-    this.userEntries = getUserEntry();
+    this.userEntries = getUserEntry(this.game.id);
     this.render();
   }
 
   update() {
     this.game = JSON.parse(localStorage.getItem('game-details'));
-    this.userEntries = getUserEntry();
+    this.userEntries = getUserEntry(this.game.id);
     this.render();
   }
 
   render() {
+    document.querySelector('#loading-game').classList.add('d-none');
     document.querySelector('#game-details').innerHTML = detailsTemplate(
       this.game,
       this.userEntries
@@ -112,7 +113,7 @@ const detailsTemplate = (game, userEntries) => {
         <button
           id="mark-played-btn"
           type="button"
-          class="btn btn-primary w-100"
+          class="btn ${userEntries ? 'btn-warning' : 'btn-success'} w-100"
           data-bs-toggle="modal"
           data-bs-target="#playedModal"
           data-bs-gameId="${game.id}"

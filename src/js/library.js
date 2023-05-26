@@ -5,7 +5,7 @@ loadHeaderFooter();
 loadModal();
 
 const library = JSON.parse(localStorage.getItem('user-library'));
-if (library.length) {
+if (library?.length) {
   new GameList().render(library, document.querySelector('#card-holder'));
 } else {
   document.querySelector('#no-library')?.classList.remove('d-none');
