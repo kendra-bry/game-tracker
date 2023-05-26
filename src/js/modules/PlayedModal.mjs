@@ -179,7 +179,7 @@ const addDeleteBtn = (gameId) => {
   const userEntries = JSON.parse(localStorage.getItem('user-entries'));
   const userLibrary = JSON.parse(localStorage.getItem('user-library'));
 
-  const deleteBtn = `<button type="button" class="btn btn-danger" id="delete-play-data">Delete Play Data</button>`;
+  const deleteBtn = `<button type="button" class="btn btn-outline-danger" id="delete-play-data">Delete Play Data</button>`;
 
   const handleDelete = () => {
     document

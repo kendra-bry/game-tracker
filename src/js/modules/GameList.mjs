@@ -75,7 +75,7 @@ const smallGameCardTemplate = (game) => {
               data-bs-gameId="${game.id}"
               data-bs-gameName="${game.name}"
               data-bs-title="${userEntry ? 'Edit Play Data' : 'Mark As Played'}"
-            >${userEntry ? 'Edit Play Data' : 'Mark As Played'}</a>
+            >${userEntry ? 'Edit Play Data' : 'Mark as Played'}</a>
           </div>
           <div class="col-12 mb-2">
             <a
@@ -94,7 +94,7 @@ const setUserData = (userEntry) => {
     return `
     <div class="border-top pt-2 mt-2">
       <div class="d-flex justify-content-center mt-1">
-        <h5 class="fw-bold bg-success text-light py-1 rounded w-50 text-center">
+        <h5 class="fw-bold border border-success text-success py-1 rounded w-50 text-center">
           <i class="bi bi-check2-square"></i>
           Played
         </h5>
