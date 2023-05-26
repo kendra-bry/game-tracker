@@ -113,7 +113,7 @@ const detailsTemplate = (game, userEntries) => {
         <button
           id="mark-played-btn"
           type="button"
-          class="btn ${userEntries ? 'btn-warning' : 'btn-success'} w-100"
+          class="btn ${userEntries ? 'btn-warning' : 'btn-primary'} w-100"
           data-bs-toggle="modal"
           data-bs-target="#playedModal"
           data-bs-gameId="${game.id}"
@@ -139,7 +139,7 @@ const addUserDetails = (userEntries) => {
       </div>
       <div class="row">
         <label class="col-6 col-xl-5 text-uppercase fw-bold fs-6" for="">My Rating:</label>
-        <span class="col ps-md-2 text-info">
+        <span class="col ps-md-2 text-primary">
             ${getStarRating(userEntries.rating)}
         </span>
       </div>

@@ -89,7 +89,7 @@ const smallGameCardTemplate = (game) => {
           <div class="col-12 mb-2">
             <a
               href="#"
-              class="btn ${userEntry ? 'btn-warning' : 'btn-success'} w-100"
+              class="btn ${userEntry ? 'btn-warning' : 'btn-outline-primary'} w-100"
               data-bs-toggle="modal"
               data-bs-target="#playedModal"
               data-bs-gameId="${game.id}"
@@ -123,7 +123,7 @@ const setUserData = (userEntry) => {
         <div class="col-5">
           My Rating:
         </div>
-        <div class="col pt-1 text-info">
+        <div class="col pt-1 text-primary">
           ${getStarRating(userEntry.rating)}
         </div>
       </div>
