@@ -2,6 +2,9 @@ import {
   getStarRating,
   renderListWithTemplate,
   getUserEntry,
+  addToBacklog,
+  addBacklogBtn,
+  removeFromBacklog,
 } from './utils.mjs';
 
 export default class GameList {
@@ -16,14 +19,25 @@ export default class GameList {
   }
 
   render(games, container) {
-    loadSearchResults(games, container);
+    renderListWithTemplate(smallGameCardTemplate, container, games);
+    initBacklogBtns();
   }
 }
 
-const loadSearchResults = (games, container) => {
-  if (games) {
-    renderListWithTemplate(smallGameCardTemplate, container, games);
-  }
+const initBacklogBtns = () => {
+  const backlogBtns = document.querySelectorAll('.addToBacklog');
+  backlogBtns?.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const gameId = btn.getAttribute('data-gameId');
+      addToBacklog(gameId);
+    });
+  });
+
+  const removeBacklogBtns = document.querySelectorAll('.removeFromBacklog');
+  removeBacklogBtns?.forEach((btn) => {
+    const gameId = btn.getAttribute('data-gameId');
+    btn.addEventListener('click', () => removeFromBacklog(gameId));
+  });
 };
 
 const smallGameCardTemplate = (game) => {
@@ -61,10 +75,16 @@ const smallGameCardTemplate = (game) => {
       <div class="card-footer py-3">
         <div class="row gx-2">
           <div class="col-12 mb-2">
-            <button class="btn btn-light w-100">
-              <i class="bi bi-plus-square me-1"></i>
-              Add to backlog
-            </button>
+            ${addBacklogBtn(game.id)}
+            <button
+              class="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center d-none"
+              type="button"
+              id="loading-btn-${game.id}"
+              disabled
+            >
+            <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+            Updating...
+          </button>
           </div>
           <div class="col-12 mb-2">
             <a

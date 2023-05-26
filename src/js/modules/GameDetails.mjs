@@ -1,4 +1,10 @@
-import { getStarRating } from './utils.mjs';
+import {
+  getStarRating,
+  addToBacklog,
+  getUserEntry,
+  removeFromBacklog,
+  addBacklogBtn,
+} from './utils.mjs';
 
 export default class GameDetails {
   constructor(gameId, dataSource) {
@@ -11,13 +17,13 @@ export default class GameDetails {
     this.game = await this.dataSource.getGameDetails(this.gameId);
     localStorage.setItem('game-details', JSON.stringify(this.game));
 
-    this.setUserEntries();
+    this.userEntries = getUserEntry();
     this.render();
   }
 
   update() {
     this.game = JSON.parse(localStorage.getItem('game-details'));
-    this.setUserEntries();
+    this.userEntries = getUserEntry();
     this.render();
   }
 
@@ -26,18 +32,12 @@ export default class GameDetails {
       this.game,
       this.userEntries
     );
-  }
-
-  setUserEntries() {
-    let userEntries = JSON.parse(localStorage.getItem('user-entries'));
-    if (userEntries) {
-      let userEntry = userEntries.find(
-        (entry) => entry.game_id == this.game.id
-      );
-      if (userEntry) {
-        this.userEntries = userEntry;
-      }
-    }
+    document
+      .querySelector('.addToBacklog')
+      ?.addEventListener('click', () => addToBacklog(this.game.id));
+    document
+      .querySelector('.removeFromBacklog')
+      ?.addEventListener('click', () => removeFromBacklog(this.game.id));
   }
 }
 
@@ -95,9 +95,15 @@ const detailsTemplate = (game, userEntries) => {
 
     <div class="row mb-1 d-flex justify-content-end">
       <div class="col-lg-4">
-        <button class="btn btn-secondary w-100">
-          <i class="bi bi-plus-square me-1"></i>
-          Add to backlog
+       ${addBacklogBtn(game.id, 'details')}
+        <button
+          class="btn btn-primary d-flex align-items-center d-none"
+          type="button"
+          id="loading-btn-${game.id}"
+          disabled
+        >
+          <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+          Updating...
         </button>
       </div>
     </div>
