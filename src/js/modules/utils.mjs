@@ -102,13 +102,13 @@ export const formDataToJSON = (formElement) => {
   return convertedJSON;
 };
 
-export const getUserEntry = (gameId) => {
-  let userEntries = getLocalStorage('user-entries');
-  let userEntry;
-  if (userEntries) {
-    userEntry = userEntries.find((entry) => entry.game_id == gameId);
+export const getUserPlayData = (gameId) => {
+  let userPlayData = getLocalStorage('user-play-data');
+  let data;
+  if (userPlayData) {
+    data = userPlayData.find((entry) => entry.game_id == gameId);
   }
-  return userEntry;
+  return data;
 };
 
 const initializeHeader = () => {

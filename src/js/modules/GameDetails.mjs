@@ -1,7 +1,7 @@
 import {
   getStarRating,
   addToBacklog,
-  getUserEntry,
+  getUserPlayData,
   removeFromBacklog,
   addBacklogBtn,
   getLocalStorage,
@@ -19,13 +19,13 @@ export default class GameDetails {
     this.game = await this.dataSource.getGameDetails(this.gameId);
     setLocalStorage('game-details', this.game)
 
-    this.userEntries = getUserEntry(this.game.id);
+    this.userEntries = getUserPlayData(this.game.id);
     this.render();
   }
 
   update() {
     this.game = getLocalStorage('game-details');
-    this.userEntries = getUserEntry(this.game.id);
+    this.userEntries = getUserPlayData(this.game.id);
     this.render();
   }
 

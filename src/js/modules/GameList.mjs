@@ -1,7 +1,7 @@
 import {
   getStarRating,
   renderListWithTemplate,
-  getUserEntry,
+  getUserPlayData,
   addToBacklog,
   addBacklogBtn,
   removeFromBacklog,
@@ -42,7 +42,7 @@ const initBacklogBtns = () => {
 };
 
 const smallGameCardTemplate = (game) => {
-  const userEntry = getUserEntry(game.id);
+  const userPlayData = getUserPlayData(game.id);
 
   return `
   <div class="col">
@@ -71,7 +71,7 @@ const smallGameCardTemplate = (game) => {
             ${getStarRating(game.rating)}
           </div>
         </div>
-        ${setUserData(userEntry)}
+        ${setUserData(userPlayData)}
       </div>
       <div class="card-footer py-3">
         <div class="row gx-2">
@@ -90,13 +90,13 @@ const smallGameCardTemplate = (game) => {
           <div class="col-12 mb-2">
             <a
               href="#"
-              class="btn ${userEntry ? 'btn-warning' : 'btn-outline-primary'} w-100"
+              class="btn ${userPlayData ? 'btn-warning' : 'btn-outline-primary'} w-100"
               data-bs-toggle="modal"
               data-bs-target="#playedModal"
               data-bs-gameId="${game.id}"
               data-bs-gameName="${game.name}"
-              data-bs-title="${userEntry ? 'Edit Play Data' : 'Mark As Played'}"
-            >${userEntry ? 'Edit Play Data' : 'Mark as Played'}</a>
+              data-bs-title="${userPlayData ? 'Edit Play Data' : 'Mark As Played'}"
+            >${userPlayData ? 'Edit Play Data' : 'Mark as Played'}</a>
           </div>
           <div class="col-12 mb-2">
             <a
@@ -110,8 +110,8 @@ const smallGameCardTemplate = (game) => {
   </div>`;
 };
 
-const setUserData = (userEntry) => {
-  if (userEntry) {
+const setUserData = (userPlayData) => {
+  if (userPlayData) {
     return `
     <div class="border-top pt-2 mt-2">
       <div class="d-flex justify-content-center mt-1">
@@ -125,7 +125,7 @@ const setUserData = (userEntry) => {
           My Rating:
         </div>
         <div class="col pt-1 text-primary">
-          ${getStarRating(userEntry.rating)}
+          ${getStarRating(userPlayData.rating)}
         </div>
       </div>
       <div class="fw-semibold mb-1 row">
@@ -133,7 +133,7 @@ const setUserData = (userEntry) => {
           Finished:
         </div>
         <div class="col">
-          ${userEntry.end_date}
+          ${userPlayData.end_date}
         </div>
       </div>
     </div>

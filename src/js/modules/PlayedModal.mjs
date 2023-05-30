@@ -3,7 +3,7 @@ import {
   getParams,
   renderWithTemplate,
   loadTemplate,
-  getUserEntry,
+  getUserPlayData,
   getLocalStorage,
   setLocalStorage,
 } from './utils.mjs';
@@ -61,15 +61,15 @@ const handleShowHide = () => {
       playedModal.querySelector('[name="game_name"]').value = gameName;
       playedModal.querySelector('#playedModalLabel').innerText = title;
 
-      let userEntry = getUserEntry(gameId);
-      if (userEntry) {
+      let userPlayData = getUserPlayData(gameId);
+      if (userPlayData) {
         playedModal.querySelector('[name="start_date"]').value =
-          userEntry.start_date;
+          userPlayData.start_date;
         playedModal.querySelector('[name="end_date"]').value =
-          userEntry.end_date;
+          userPlayData.end_date;
         playedModal.querySelector('[name="comments"]').value =
-          userEntry.comments;
-        setRating(userEntry.rating);
+          userPlayData.comments;
+        setRating(userPlayData.rating);
 
         addDeleteBtn(gameId);
       }
@@ -178,7 +178,7 @@ const interactiveStars = () => {
 };
 
 const addDeleteBtn = (gameId) => {
-  const userEntries = getLocalStorage('user-entries');
+  const userPlayData = getLocalStorage('user-play-data');
   const userLibrary = getLocalStorage('user-library');
 
   const deleteBtn = `<button type="button" class="btn btn-outline-danger" id="delete-play-data">Delete Play Data</button>`;
@@ -187,11 +187,11 @@ const addDeleteBtn = (gameId) => {
     document
       .querySelector('#delete-play-data')
       .addEventListener('click', () => {
-        let userEntryIndex = userEntries.findIndex(
+        let userPlayDataIndex = userPlayData.findIndex(
           (game) => game.game_id == gameId
         );
-        userEntries.splice(userEntryIndex, 1);
-        setLocalStorage('user-entries', userEntries);
+        userPlayData.splice(userPlayDataIndex, 1);
+        setLocalStorage('user-play-data', userPlayData);
 
         let libraryIndex = userLibrary.findIndex((game) => game.id == gameId);
         userLibrary.splice(libraryIndex, 1);
@@ -276,22 +276,22 @@ const setRating = (rating) => {
 };
 
 const updateUserEntries = (jsonFormData) => {
-  let userEntries = getLocalStorage('user-entries');
-  if (!userEntries) {
-    userEntries = [];
-    userEntries.push(jsonFormData);
+  let userPlayData = getLocalStorage('user-play-data');
+  if (!userPlayData) {
+    userPlayData = [];
+    userPlayData.push(jsonFormData);
   } else {
-    let index = userEntries.findIndex(
+    let index = userPlayData.findIndex(
       (game) => game.game_id == jsonFormData.game_id
     );
 
     if (index > -1) {
-      userEntries[index] = jsonFormData;
+      userPlayData[index] = jsonFormData;
     } else {
-      userEntries.push(jsonFormData);
+      userPlayData.push(jsonFormData);
     }
   }
-  setLocalStorage('user-entries', userEntries);
+  setLocalStorage('user-play-data', userPlayData);
 };
 
 const updateUserLibrary = (gameId) => {
