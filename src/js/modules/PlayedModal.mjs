@@ -4,6 +4,8 @@ import {
   renderWithTemplate,
   loadTemplate,
   getUserEntry,
+  getLocalStorage,
+  setLocalStorage,
 } from './utils.mjs';
 import GameDetails from './GameDetails.mjs';
 
@@ -176,8 +178,8 @@ const interactiveStars = () => {
 };
 
 const addDeleteBtn = (gameId) => {
-  const userEntries = JSON.parse(localStorage.getItem('user-entries'));
-  const userLibrary = JSON.parse(localStorage.getItem('user-library'));
+  const userEntries = getLocalStorage('user-entries');
+  const userLibrary = getLocalStorage('user-library');
 
   const deleteBtn = `<button type="button" class="btn btn-outline-danger" id="delete-play-data">Delete Play Data</button>`;
 
@@ -189,11 +191,11 @@ const addDeleteBtn = (gameId) => {
           (game) => game.game_id == gameId
         );
         userEntries.splice(userEntryIndex, 1);
-        localStorage.setItem('user-entries', JSON.stringify(userEntries));
+        setLocalStorage('user-entries', userEntries);
 
         let libraryIndex = userLibrary.findIndex((game) => game.id == gameId);
         userLibrary.splice(libraryIndex, 1);
-        localStorage.setItem('user-library', JSON.stringify(userLibrary));
+        setLocalStorage('user-library', userLibrary);
 
         if (getParams('id')) {
           new GameDetails(gameId).update();
@@ -274,7 +276,7 @@ const setRating = (rating) => {
 };
 
 const updateUserEntries = (jsonFormData) => {
-  let userEntries = JSON.parse(localStorage.getItem('user-entries'));
+  let userEntries = getLocalStorage('user-entries');
   if (!userEntries) {
     userEntries = [];
     userEntries.push(jsonFormData);
@@ -289,14 +291,12 @@ const updateUserEntries = (jsonFormData) => {
       userEntries.push(jsonFormData);
     }
   }
-  localStorage.setItem('user-entries', JSON.stringify(userEntries));
+  setLocalStorage('user-entries', userEntries);
 };
 
 const updateUserLibrary = (gameId) => {
-  let searchResults = JSON.parse(
-    localStorage.getItem('search-results')
-  ).results;
-  let userLibrary = JSON.parse(localStorage.getItem('user-library'));
+  let searchResults = getLocalStorage('search-results').results;
+  let userLibrary = getLocalStorage('user-library');
   if (!userLibrary) {
     userLibrary = [];
   }
@@ -310,5 +310,5 @@ const updateUserLibrary = (gameId) => {
     userLibrary.push(game);
   }
 
-  localStorage.setItem('user-library', JSON.stringify(userLibrary));
+  setLocalStorage('user-library', userLibrary);
 };

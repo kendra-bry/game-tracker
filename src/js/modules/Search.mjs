@@ -1,4 +1,4 @@
-import { formDataToJSON } from './utils.mjs';
+import { formDataToJSON, setLocalStorage } from './utils.mjs';
 import DataSource from './DataSource.mjs';
 
 export default class Search {
@@ -24,8 +24,8 @@ const handleSubmit = () => {
       const dataSource = new DataSource();
 
       const results = await dataSource.search(query.query);
-      localStorage.setItem('search-results', JSON.stringify(results));
-      localStorage.setItem('search-query', JSON.stringify(query));
+      setLocalStorage('search-results', results);
+      setLocalStorage('search-query', query);
 
       window.location.replace('/search/index.html');
     });

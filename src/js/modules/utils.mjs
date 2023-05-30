@@ -3,6 +3,14 @@ import GameDetails from './GameDetails.mjs';
 import DataSource from './DataSource.mjs';
 import Search from './Search.mjs';
 
+export const getLocalStorage = (key) => {
+  return JSON.parse(localStorage.getItem(key));
+};
+
+export const setLocalStorage = (key, data) => {
+  localStorage.setItem(key, JSON.stringify(data));
+};
+
 export const renderListWithTemplate = (
   templateFn,
   parentElement,
@@ -95,7 +103,7 @@ export const formDataToJSON = (formElement) => {
 };
 
 export const getUserEntry = (gameId) => {
-  let userEntries = JSON.parse(localStorage.getItem('user-entries'));
+  let userEntries = getLocalStorage('user-entries');
   let userEntry;
   if (userEntries) {
     userEntry = userEntries.find((entry) => entry.game_id == gameId);
@@ -112,7 +120,7 @@ const setActivePage = () => {
   const page = window.location.pathname.split('/')[1];
   if (page.length) {
     if (page == 'search') {
-      const query = JSON.parse(localStorage.getItem('search-query'));
+      const query = getLocalStorage('search-query');
       const searchBox = document.querySelector('#search-box');
       searchBox.value = query.query;
     }
@@ -129,7 +137,7 @@ const setActivePage = () => {
 
 export const addToBacklog = async (gameId) => {
   let id = getParams('id');
-  let backlog = JSON.parse(localStorage.getItem('user-backlog'));
+  let backlog = getLocalStorage('user-backlog');
 
   let addToBacklogBtn = document.querySelector(`#add-backlog-${gameId}`);
   addToBacklogBtn?.classList.add('d-none');
@@ -138,7 +146,7 @@ export const addToBacklog = async (gameId) => {
   loadingBtn?.classList.remove('d-none');
 
   let game = id
-    ? JSON.parse(localStorage.getItem('game-details'))
+    ? getLocalStorage('game-details')
     : await new DataSource().getGameDetails(gameId);
 
   if (!backlog) {
@@ -151,7 +159,7 @@ export const addToBacklog = async (gameId) => {
     }
   }
 
-  localStorage.setItem('user-backlog', JSON.stringify(backlog));
+  setLocalStorage('user-backlog', backlog);
 
   if (id) {
     new GameDetails(gameId).update();
@@ -161,7 +169,7 @@ export const addToBacklog = async (gameId) => {
 };
 
 export const removeFromBacklog = (gameId) => {
-  let backlog = JSON.parse(localStorage.getItem('user-backlog'));
+  let backlog = getLocalStorage('user-backlog');
 
   if (!backlog) {
     return;
@@ -173,7 +181,7 @@ export const removeFromBacklog = (gameId) => {
     }
   }
 
-  localStorage.setItem('user-backlog', JSON.stringify(backlog));
+  setLocalStorage('user-backlog', backlog);
 
   if (getParams('id')) {
     new GameDetails(gameId).update();
@@ -203,7 +211,7 @@ export const addBacklogBtn = (gameId, page) => {
     Remove from Backlog
   </button>`;
 
-  let backlog = JSON.parse(localStorage.getItem('user-backlog'));
+  let backlog = getLocalStorage('user-backlog');
   if (!backlog) {
     backlog = [];
   }

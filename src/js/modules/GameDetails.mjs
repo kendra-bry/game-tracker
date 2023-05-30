@@ -4,6 +4,8 @@ import {
   getUserEntry,
   removeFromBacklog,
   addBacklogBtn,
+  getLocalStorage,
+  setLocalStorage,
 } from './utils.mjs';
 
 export default class GameDetails {
@@ -15,14 +17,14 @@ export default class GameDetails {
 
   async init() {
     this.game = await this.dataSource.getGameDetails(this.gameId);
-    localStorage.setItem('game-details', JSON.stringify(this.game));
+    setLocalStorage('game-details', this.game)
 
     this.userEntries = getUserEntry(this.game.id);
     this.render();
   }
 
   update() {
-    this.game = JSON.parse(localStorage.getItem('game-details'));
+    this.game = getLocalStorage('game-details');
     this.userEntries = getUserEntry(this.game.id);
     this.render();
   }

@@ -5,6 +5,7 @@ import {
   addToBacklog,
   addBacklogBtn,
   removeFromBacklog,
+  setLocalStorage,
 } from './utils.mjs';
 
 export default class GameList {
@@ -15,7 +16,7 @@ export default class GameList {
 
   async librarySearch() {
     const results = await this.dataSource.search(this.query);
-    localStorage.setItem('search-results', JSON.stringify(results));
+    setLocalStorage('search-results', results)
   }
 
   render(games, container) {
